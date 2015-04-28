@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-	[RequireComponent(typeof (AudioSource))]
-public class Gun : MonoBehaviour {
+[RequireComponent(typeof(AudioSource))]
+public class Gun : MonoBehaviour
+{
 
-	public enum GunType {Semi,Burst,Auto};
+	public enum GunType
+	{
+		Semi,
+		Burst,
+		Auto}
+	;
 	public GunType gunType;
 	public float rpm;
-
 	public Transform spawn;
 	public Transform shellEjectionPoint;
 	public Rigidbody shell;
@@ -17,15 +22,16 @@ public class Gun : MonoBehaviour {
 	private float secondsBetweenShots;
 	private float nextPossibleShootTime;
 
-
-	void Start(){
+	void Start ()
+	{
 		secondsBetweenShots = 60 / rpm;
 		if (GetComponent<LineRenderer> ()) {
-			tracer = GetComponent<LineRenderer>();
+			tracer = GetComponent<LineRenderer> ();
 		}
 	}
 
-	public void Shoot() {
+	public void Shoot ()
+	{
 
 		if (CanShoot ()) {
 			Ray ray = new Ray (spawn.position, spawn.forward);
@@ -39,27 +45,30 @@ public class Gun : MonoBehaviour {
 
 			nextPossibleShootTime = Time.time + secondsBetweenShots;
 
-			GetComponent<AudioSource>().Play();
+			GetComponent<AudioSource> ().Play ();
 
-			if(tracer){
-				StartCoroutine("RenderTracer",ray.direction * shotDistance);
+			if (tracer) {
+				StartCoroutine ("RenderTracer", ray.direction * shotDistance);
 			}
 
-			Rigidbody newShell = Instantiate(shell,shellEjectionPoint.position,transform.rotation) as Rigidbody;
-			newShell.AddForce(shellEjectionPoint.forward * Random.Range(150f,200f) + spawn.forward * Random.Range (-10f,10f));
+			Rigidbody newShell = Instantiate (shell, shellEjectionPoint.position, Quaternion.Euler (transform.rotation.eulerAngles + new Vector3 (90, 0, 0))) as Rigidbody;
+			newShell.AddForce (shellEjectionPoint.forward * Random.Range (150f, 200f) + spawn.forward * Random.Range (-10f, 10f));
 		}
 
 
 	}
 
-	public void ShootContinuous(){
+	public void ShootContinuous ()
+	{
 		if (gunType == GunType.Auto) {
 			Shoot ();
 		}
 
 
 	}
-	private bool CanShoot(){
+
+	private bool CanShoot ()
+	{
 		bool canShoot = true;
 
 		if (Time.time < nextPossibleShootTime) {
@@ -69,10 +78,11 @@ public class Gun : MonoBehaviour {
 		return canShoot;
 	}
 
-	IEnumerator RenderTracer(Vector3 hitPoint){
+	IEnumerator RenderTracer (Vector3 hitPoint)
+	{
 		tracer.enabled = true;
-		tracer.SetPosition (0,spawn.position);
-		tracer.SetPosition (1,spawn.position + hitPoint);
+		tracer.SetPosition (0, spawn.position);
+		tracer.SetPosition (1, spawn.position + hitPoint);
 		yield return null;
 		tracer.enabled = false;
 	}

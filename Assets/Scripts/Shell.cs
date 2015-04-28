@@ -1,57 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shell : MonoBehaviour {
+public class Shell : MonoBehaviour
+{
 
 	private float lifeTime = 5;
-
 	private Material mat;
 	private Color originalCol;
 	private float fadePercent;
 	private float deathTime;
 	private bool fading;
-	private float originalTime;
 
-	void Start(){
-		mat = GetComponent<Renderer>().material;
+	void Start ()
+	{
+		mat = GetComponent<Renderer> ().material;
 		originalCol = mat.color;
 		deathTime = Time.time + lifeTime;
-		originalTime = Time.time;
 
 		//StartCoroutine ("Fade");
 	}
-/*
-	IEnumerable Fade(){
-		while (true) {
-			yield return new WaitForSeconds(.2f);
 
-			if(fading) {
-				fadePercent += Time.deltaTime;
-				mat.color = Color.Lerp(originalCol, Color.clear,fadePercent);
+	void Update ()
+	{
+		if (fading) {
+			fadePercent += Time.deltaTime * 0.2f;
+			mat.color = Color.Lerp (originalCol, Color.clear, fadePercent);
 
-				if (fadePercent >= 1){
-					Destroy (gameObject);
-				}
+			if (fadePercent >= 1) {
+				Destroy (gameObject);
 			}
-			else {
-				if(Time.time > deathTime){
-					fading = true;
-				}
-			}
-
 		}
-	}
-	*/
-
-	void Update(){
-		if (Time.time > originalTime + deathTime) {
-			Destroy (gameObject);
+		else {
+			if (Time.time > deathTime) {
+				fading = true;
+			}
 		}
 	}
 
-	void OnTriggerEnter(Collider c){
-		if(c.tag == "Ground"){
-			GetComponent<Rigidbody>().Sleep();
+	void OnTriggerEnter (Collider c)
+	{
+		if (c.tag == "Ground") {
+			GetComponent<Rigidbody> ().Sleep ();
 			//If shells collide with ground, they stop animating
 		}
 	}
