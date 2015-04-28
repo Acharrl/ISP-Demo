@@ -10,15 +10,17 @@ public class Shell : MonoBehaviour {
 	private float fadePercent;
 	private float deathTime;
 	private bool fading;
+	private float originalTime;
 
 	void Start(){
 		mat = GetComponent<Renderer>().material;
 		originalCol = mat.color;
 		deathTime = Time.time + lifeTime;
+		originalTime = Time.time;
 
-		StartCoroutine ("Fade");
+		//StartCoroutine ("Fade");
 	}
-
+/*
 	IEnumerable Fade(){
 		while (true) {
 			yield return new WaitForSeconds(.2f);
@@ -39,6 +41,14 @@ public class Shell : MonoBehaviour {
 
 		}
 	}
+	*/
+
+	void Update(){
+		if (Time.time > originalTime + deathTime) {
+			Destroy (gameObject);
+		}
+	}
+
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Ground"){
 			GetComponent<Rigidbody>().Sleep();

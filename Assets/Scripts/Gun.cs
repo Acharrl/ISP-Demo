@@ -45,7 +45,7 @@ public class Gun : MonoBehaviour {
 				StartCoroutine("RenderTracer",ray.direction * shotDistance);
 			}
 
-			Rigidbody newShell = Instantiate(shell,shellEjectionPoint.position,Quaternion.identity) as Rigidbody;
+			Rigidbody newShell = Instantiate(shell,shellEjectionPoint.position,transform.rotation) as Rigidbody;
 			newShell.AddForce(shellEjectionPoint.forward * Random.Range(150f,200f) + spawn.forward * Random.Range (-10f,10f));
 		}
 
