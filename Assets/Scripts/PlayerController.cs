@@ -31,10 +31,16 @@ public class PlayerController : MonoBehaviour {
 		ControlMouse ();
 		//ControlWASD():
 
-		if (Input.GetButtonDown ("Shoot")) {
+		if (Input.GetButtonDown ("Shoot") && !Input.GetButton ("Run")) {
 			gun.Shoot ();
-		} else if (Input.GetButton ("Shoot")) {
+		} else if (Input.GetButton ("Shoot") && !Input.GetButton ("Run")) {
 			gun.ShootContinuous();
+		}
+
+		if (Input.GetButtonDown ("Weapon 1")) {
+			gun.SwitchWeapon ('1');
+		} else if (Input.GetButtonDown ("Weapon 2")) {
+			gun.SwitchWeapon ('2');
 		}
 
 	}

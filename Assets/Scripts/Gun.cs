@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
@@ -16,6 +17,7 @@ public class Gun : MonoBehaviour
 	public Transform spawn;
 	public Transform shellEjectionPoint;
 	public Rigidbody shell;
+	public Text gunText;
 	private LineRenderer tracer;
 
 	//System
@@ -28,6 +30,8 @@ public class Gun : MonoBehaviour
 		if (GetComponent<LineRenderer> ()) {
 			tracer = GetComponent<LineRenderer> ();
 		}
+
+		gunType = GunType.Semi;
 	}
 
 	public void Shoot ()
@@ -65,6 +69,17 @@ public class Gun : MonoBehaviour
 		}
 
 
+	}
+
+	public void SwitchWeapon(char wpn)
+	{
+		if (wpn.Equals ('1')) {
+			gunType = GunType.Semi;
+			gunText.text = "Pistol";
+		} else if (wpn.Equals ('2')) {
+			gunType = GunType.Auto;
+			gunText.text = "Assault Rifle";
+		}
 	}
 
 	private bool CanShoot ()
