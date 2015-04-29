@@ -19,11 +19,13 @@ public class PlayerController : MonoBehaviour {
 	private CharacterController controller;
 	private Camera cam;
 
+	public bool isShooting;
 	
 	void Start()
 	{
 		controller = GetComponent<CharacterController>();
 		cam = Camera.main;
+		isShooting = false;
 	}
 
 	void Update()
@@ -33,9 +35,10 @@ public class PlayerController : MonoBehaviour {
 
 		if (Input.GetButtonDown ("Shoot") && !Input.GetButton ("Run")) {
 			gun.Shoot ();
+			isShooting = true;
 		} else if (Input.GetButton ("Shoot") && !Input.GetButton ("Run")) {
 			gun.ShootContinuous();
-		}
+		} else {isShooting = false;}
 
 		if (Input.GetButtonDown ("Weapon 1")) {
 			gun.SwitchWeapon ('1');
