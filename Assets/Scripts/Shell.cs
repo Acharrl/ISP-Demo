@@ -24,9 +24,17 @@ public class Shell : MonoBehaviour
 	{
 		if (fading) {
 			fadePercent += Time.deltaTime * 0.2f;
-			mat.color = Color.Lerp (originalCol, Color.clear, fadePercent);
 
-			if (fadePercent >= 1) {
+			if(fadePercent < .6){
+			mat.color = Color.Lerp (originalCol, new Color(.47f,.46f,.46f,.7f), fadePercent * 1.3f);
+			}
+
+			if (fadePercent >= .6 && fadePercent < 1) {
+				mat.color = Color.Lerp (new Color(.47f,.46f,.46f,.7f), Color.clear, (fadePercent-.6f) * 2.5f);
+			}
+
+			if(fadePercent > 1)
+			{
 				Destroy (gameObject);
 			}
 		}
@@ -44,5 +52,6 @@ public class Shell : MonoBehaviour
 			//If shells collide with ground, they stop animating
 		}
 	}
+	
 		
 }
