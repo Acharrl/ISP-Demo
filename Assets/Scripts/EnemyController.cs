@@ -3,17 +3,29 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
-	public Transform reactor;
+	public GameObject reactor;
 	public GameObject player;
 	public float fovAngle;
 	public float fovRange;
 
 	private NavMeshAgent agent;
+	private bool targetingReactor;
 
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
-		agent.destination = reactor.position;
+		targetingReactor = true;
+	}
+	void Update()
+	{
+		if(agent.remainingDistance < 0.2)
+		{
+			targetingReactor = true;
+		}
+		if(targetingReactor)
+		{
+			agent.destination = reactor.transform.position + Vector3.ClampMagnitude((transform.position - reactor.transform.position).normalized, 2.5f);
+		}
 	}
 	void OnTriggerStay(Collider other)
 	{
@@ -28,14 +40,26 @@ public class EnemyController : MonoBehaviour
 				{
 					if(hit.collider.gameObject == player)
 					{
+						targetingReactor = false;
+						agent.Resume();
 						agent.destination = player.transform.position;
 					}
 				}
 			}
-			else if(player.GetComponent<PlayerController>().isShooting)
+			if(player.GetComponent<PlayerController>().isShooting)
 			{
+				targetingReactor = false;
+				agent.Resume();
 				agent.destination = player.transform.position;
 			}
+		}
+	}
+	void OnCollisionEnter(Collision collision)
+	{
+		if(collision.gameObject == reactor && targetingReactor)
+		{
+			targetingReactor = false;
+			agent.Stop();
 		}
 	}
 }
