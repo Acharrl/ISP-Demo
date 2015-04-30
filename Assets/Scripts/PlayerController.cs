@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 	[RequireComponent (typeof (CharacterController))]
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour {
 	//Components
 	public Transform hand;
 	public Gun[] guns;
+	public string[] gunList;
+	public Text gunText;
 	public Gun equippedGun;
 	private CharacterController controller;
 	private Camera cam;
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 		cam = Camera.main;
 		isShooting = false;
+		gunText.text = gunList [0];
 		EquipGun (0);
 	}
 
@@ -38,6 +42,7 @@ public class PlayerController : MonoBehaviour {
 
 		equippedGun = Instantiate (guns [i], hand.position, hand.rotation) as Gun;
 		equippedGun.transform.parent = hand;
+		gunText.text = gunList [i];
 	}
 
 
