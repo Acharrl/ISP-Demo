@@ -19,6 +19,7 @@ public class Gun : MonoBehaviour
 	public Transform shellEjectionPoint;
 	public Rigidbody shell;
 	public Text gunText;
+	public float damage;
 	private LineRenderer tracer;
 
 	//System
@@ -45,7 +46,12 @@ public class Gun : MonoBehaviour
 
 			if (Physics.Raycast (ray, out hit, shotDistance)) {
 				shotDistance = hit.distance;
+				if (hit.collider.gameObject.tag == "Enemy")
+				{
+					hit.collider.gameObject.GetComponent<EnemyController>().health -= damage;
+				}
 			}
+
 
 			nextPossibleShootTime = Time.time + secondsBetweenShots;
 

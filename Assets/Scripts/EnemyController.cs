@@ -7,6 +7,8 @@ public class EnemyController : MonoBehaviour
 	public GameObject player;
 	public float fovAngle;
 	public float fovRange;
+	public float health;
+	public float damage;
 
 	private NavMeshAgent agent;
 	private bool targetingReactor;
@@ -15,6 +17,7 @@ public class EnemyController : MonoBehaviour
 	{
 		agent = GetComponent<NavMeshAgent>();
 		targetingReactor = true;
+		damage = 1;
 	}
 	void Update()
 	{
@@ -25,6 +28,10 @@ public class EnemyController : MonoBehaviour
 		if(targetingReactor)
 		{
 			agent.destination = reactor.transform.position + Vector3.ClampMagnitude((transform.position - reactor.transform.position).normalized, 2.49f);
+		}
+		if(health <= 0)
+		{
+			Destroy(gameObject);
 		}
 	}
 	void OnTriggerStay(Collider other)
@@ -56,11 +63,16 @@ public class EnemyController : MonoBehaviour
 	}
 	void OnCollisionEnter(Collision collision)
 	{
-        if(collision.gameObject == reactor && targetingReactor)
+		if(collision.gameObject == reactor && targetingReactor)
 		{
 			targetingReactor = false;
 			Sleep();
             transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
+		}
+
+		if (collision.gameObject == player)
+		{
+			player.GetComponent<PlayerController>().playerHealth -= damage;
 		}
 	}
 	void Sleep()
