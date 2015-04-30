@@ -24,7 +24,7 @@ public class EnemyController : MonoBehaviour
 		}
 		if(targetingReactor)
 		{
-			agent.destination = reactor.transform.position + Vector3.ClampMagnitude((transform.position - reactor.transform.position).normalized, 2.5f);
+			agent.destination = reactor.transform.position + Vector3.ClampMagnitude((transform.position - reactor.transform.position).normalized, 2.49f);
 		}
 	}
 	void OnTriggerStay(Collider other)
@@ -41,7 +41,7 @@ public class EnemyController : MonoBehaviour
 					if(hit.collider.gameObject == player)
 					{
 						targetingReactor = false;
-						agent.Resume();
+						Wake();
 						agent.destination = player.transform.position;
 					}
 				}
@@ -49,17 +49,28 @@ public class EnemyController : MonoBehaviour
 			if(player.GetComponent<PlayerController>().isShooting)
 			{
 				targetingReactor = false;
-				agent.Resume();
+				Wake();
 				agent.destination = player.transform.position;
 			}
 		}
 	}
 	void OnCollisionEnter(Collision collision)
 	{
-		if(collision.gameObject == reactor && targetingReactor)
+        if(collision.gameObject == reactor && targetingReactor)
 		{
 			targetingReactor = false;
-			agent.Stop();
+			Sleep();
+            transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
 		}
+	}
+	void Sleep()
+	{
+		agent.Stop();
+		GetComponent<Rigidbody>().Sleep();
+	}
+	void Wake()
+	{
+		agent.Resume();
+		GetComponent<Rigidbody>().WakeUp();
 	}
 }
