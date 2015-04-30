@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
 	public GameObject player;
 	public float fovAngle;
 	public float fovRange;
+	public float senseRange;
 	public float health;
 	public float damage;
 
@@ -47,17 +48,17 @@ public class EnemyController : MonoBehaviour
 				{
 					if(hit.collider.gameObject == player)
 					{
-						targetingReactor = false;
-						Wake();
-						agent.destination = player.transform.position;
+						TargetPlayer();
 					}
 				}
 			}
 			if(player.GetComponent<PlayerController>().isShooting)
 			{
-				targetingReactor = false;
-				Wake();
-				agent.destination = player.transform.position;
+				TargetPlayer();
+			}
+			else if((player.transform.position - transform.position).magnitude <= senseRange)
+			{
+				TargetPlayer();
 			}
 		}
 	}
@@ -84,5 +85,11 @@ public class EnemyController : MonoBehaviour
 	{
 		agent.Resume();
 		GetComponent<Rigidbody>().WakeUp();
+	}
+	void TargetPlayer()
+	{
+		targetingReactor = false;
+		Wake();
+		agent.destination = player.transform.position + Vector3.ClampMagnitude((transform.position - player.transform.position).normalized, 1);
 	}
 }
