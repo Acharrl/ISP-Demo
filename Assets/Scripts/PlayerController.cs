@@ -15,7 +15,9 @@ public class PlayerController : MonoBehaviour {
 	private Vector3 currentVelocityMod;
 
 	//Components
-	public Gun gun;
+	public Transform hand;
+	public Gun[] guns;
+	public Gun equippedGun;
 	private CharacterController controller;
 	private Camera cam;
 
@@ -26,27 +28,56 @@ public class PlayerController : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 		cam = Camera.main;
 		isShooting = false;
+		EquipGun (0);
 	}
 
-	void Update()
+	public void EquipGun(int i){
+		if (equippedGun) {
+			Destroy (equippedGun.gameObject);
+		}
+
+		equippedGun = Instantiate (guns [i], hand.position, hand.rotation) as Gun;
+		equippedGun.transform.parent = hand;
+	}
+
+
+
+	public void Update()
 	{
 		ControlMouse ();
-		//ControlWASD():
-
-		if (Input.GetButtonDown ("Shoot") && !Input.GetButton ("Run")) {
-			gun.Shoot ();
-			isShooting = true;
-		} else if (Input.GetButton ("Shoot") && !Input.GetButton ("Run")) {
-			gun.ShootContinuous();
-		} else {isShooting = false;}
+		if (equippedGun && !Input.GetButton ("Run")) {
+			if (Input.GetButtonDown ("Shoot")) {
+				equippedGun.Shoot ();
+				isShooting = true;
+			} else if (Input.GetButton ("Shoot")) {
+				equippedGun.ShootContinuous ();
+			} else {
+				isShooting = false;
+			}
+		}
 
 		if (Input.GetButtonDown ("Weapon 1")) {
-			gun.SwitchWeapon ('1');
+			EquipGun (0);
 		} else if (Input.GetButtonDown ("Weapon 2")) {
-			gun.SwitchWeapon ('2');
+			EquipGun (1);
+		} else if (Input.GetButtonDown ("Weapon 3")) {
+			EquipGun (2);
+		} else if (Input.GetButtonDown ("Next Weapon") && equippedGun.gunID < (guns.Length - 1)) {
+			print (equippedGun.gunID);
+			EquipGun (equippedGun.gunID + 1);
+			print (equippedGun.gunID);
+		} else if (Input.GetButtonDown ("Next Weapon") && equippedGun.gunID == (guns.Length - 1)) {
+			print (equippedGun.gunID);
+			EquipGun (0);
+			print (equippedGun.gunID);
+		} else if (Input.GetButtonDown ("Previous Weapon") && equippedGun.gunID > 0) {
+			EquipGun (equippedGun.gunID - 1);
+		} else if (Input.GetButtonDown ("Previous Weapon") && equippedGun.gunID == 0) {
+			EquipGun (guns.Length - 1);
 		}
 
 	}
+	
 
 	void ControlMouse(){
 
@@ -66,26 +97,5 @@ public class PlayerController : MonoBehaviour {
 		motion += Vector3.up * -8;
 		
 		controller.Move (motion * Time.deltaTime);
-	}
-
-	void ControlWASD(){
-		Vector3 input = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical"));
-		//No acceleration for .GetAxisRaw compared to .GetAxis
-		
-		
-		if (input != Vector3.zero) { //So that it doesn't snap back to forward
-			targetRotation = Quaternion.LookRotation (input);
-			//Makes player look in direction of travel
-			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y,targetRotation.eulerAngles.y,rotationSpeed * Time.deltaTime);
-		}
-		//acceleration
-		currentVelocityMod = Vector3.MoveTowards (currentVelocityMod, input, acceleration * Time.deltaTime);
-		Vector3 motion = input;
-
-		motion *= (Mathf.Abs (input.x) == 1 && Mathf.Abs (input.z) == 1) ? .7f : 1;
-		motion *= (Input.GetButton("Run"))?runSpeed:walkSpeed;
-		motion += Vector3.up * -8;
-		
-		controller.Move(motion * Time.deltaTime);
 	}
 }

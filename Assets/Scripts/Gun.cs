@@ -12,6 +12,7 @@ public class Gun : MonoBehaviour
 		Burst,
 		Auto}
 	;
+	public int gunID;
 	public GunType gunType;
 	public float rpm;
 	public Transform spawn;
@@ -31,7 +32,6 @@ public class Gun : MonoBehaviour
 			tracer = GetComponent<LineRenderer> ();
 		}
 
-		gunType = GunType.Semi;
 	}
 
 	public void Shoot ()
@@ -70,17 +70,7 @@ public class Gun : MonoBehaviour
 
 
 	}
-
-	public void SwitchWeapon(char wpn)
-	{
-		if (wpn.Equals ('1')) {
-			gunType = GunType.Semi;
-			gunText.text = "Pistol";
-		} else if (wpn.Equals ('2')) {
-			gunType = GunType.Auto;
-			gunText.text = "Assault Rifle";
-		}
-	}
+	
 
 	private bool CanShoot ()
 	{
