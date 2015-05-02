@@ -22,6 +22,13 @@ public class Gun : MonoBehaviour
 	public float damage;
 	private LineRenderer tracer;
 
+	//ammo
+	public int ammoCount;
+	public int clipSize;
+	public int ammoLoaded;
+	public int ammoNotLoaded;
+
+
 	//System
 	private float secondsBetweenShots;
 	private float nextPossibleShootTime;
@@ -33,12 +40,20 @@ public class Gun : MonoBehaviour
 			tracer = GetComponent<LineRenderer> ();
 		}
 
+		if (ammoLoaded > clipSize) {
+			ammoLoaded = clipSize;
+		}
+
+		ammoNotLoaded = ammoCount - ammoLoaded;
+				
 	}
 
 	public void Shoot ()
 	{
-
 		if (CanShoot ()) {
+			ammoCount -= 1;
+			ammoLoaded -= 1;
+
 			Ray ray = new Ray (spawn.position, spawn.forward);
 			RaycastHit hit;
 
@@ -68,6 +83,17 @@ public class Gun : MonoBehaviour
 
 	}
 
+	public void reload()
+	{
+		if (ammoCount >= clipSize) {
+			ammoLoaded = clipSize;
+		}
+		else {ammoLoaded = ammoCount;}
+
+		ammoNotLoaded = ammoCount - ammoLoaded;
+
+	}
+
 	public void ShootContinuous ()
 	{
 		if (gunType == GunType.Auto) {
@@ -83,6 +109,10 @@ public class Gun : MonoBehaviour
 		bool canShoot = true;
 
 		if (Time.time < nextPossibleShootTime) {
+			canShoot = false;
+		}
+
+		if (ammoLoaded == 0) {
 			canShoot = false;
 		}
 

@@ -19,11 +19,14 @@ public class PlayerController : MonoBehaviour {
 	public Transform hand;
 	public Gun[] guns;
 	public string[] gunList;
+	public int[,] gunInfo = new int[10,2];
 	public Text gunText;
 	public Gun equippedGun;
 	private CharacterController controller;
 	private Camera cam;
 	public Text healthText;
+	public Text ammoCountText;
+	public Text ammoLoadedText;
 
 	public bool isShooting;
 	public bool alive;
@@ -43,23 +46,38 @@ public class PlayerController : MonoBehaviour {
 		deathTime = 0f;
 		playerHealth = 100f;
 		gunText.text = gunList [0];
-		EquipGun (0);
-	}
 
+		for (int i = 0; i < guns.Length; i++) {
+			gunInfo [i,0] = guns [i].ammoCount;
+			gunInfo [i,1] = guns [i].ammoLoaded;
+		}
+		EquipGun (0);
+
+	}
+	
 	public void EquipGun(int i){
 		if (equippedGun) {
+			gunInfo[equippedGun.gunID,0] = equippedGun.ammoCount;
+			gunInfo[equippedGun.gunID,1] = equippedGun.ammoLoaded;
 			Destroy (equippedGun.gameObject);
 		}
-
 		equippedGun = Instantiate (guns [i], hand.position, hand.rotation) as Gun;
 		equippedGun.transform.parent = hand;
 		gunText.text = gunList [i];
+		equippedGun.ammoCount = gunInfo[equippedGun.gunID,0];
+		equippedGun.ammoLoaded = gunInfo[equippedGun.gunID,1];
+		ammoCountText.text = "" + equippedGun.ammoLoaded;
+		ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
 	}
 
 
 
 	public void Update()
 	{
+		if (equippedGun) {
+			ammoCountText.text = "" + equippedGun.ammoLoaded;
+			ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
+		}
 		healthText.text = "Player Health: " + playerHealth;
 		if (alive) {
 			ControlMouse ();
@@ -81,18 +99,17 @@ public class PlayerController : MonoBehaviour {
 			} else if (Input.GetButtonDown ("Weapon 3")) {
 				EquipGun (2);
 			} else if (Input.GetButtonDown ("Next Weapon") && equippedGun.gunID < (guns.Length - 1)) {
-				print (equippedGun.gunID);
 				EquipGun (equippedGun.gunID + 1);
-				print (equippedGun.gunID);
 			} else if (Input.GetButtonDown ("Next Weapon") && equippedGun.gunID == (guns.Length - 1)) {
-				print (equippedGun.gunID);
 				EquipGun (0);
-				print (equippedGun.gunID);
 			} else if (Input.GetButtonDown ("Previous Weapon") && equippedGun.gunID > 0) {
 				EquipGun (equippedGun.gunID - 1);
 			} else if (Input.GetButtonDown ("Previous Weapon") && equippedGun.gunID == 0) {
 				EquipGun (guns.Length - 1);
+			} else if (Input.GetButtonDown ("Reload")) {
+				equippedGun.reload ();
 			}
+
 
 			if (playerHealth <= 0) {
 				alive = false;
