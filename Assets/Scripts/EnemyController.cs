@@ -10,16 +10,18 @@ public class EnemyController : MonoBehaviour
 	public float senseRange;
 	public float health;
 	public float damage;
-
+	public float attackDelay;
 	private NavMeshAgent agent;
 	private bool targetingReactor;
+	private float attackTimer;
 
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
 		targetingReactor = true;
-		damage = 1;
+		attackTimer = 0;
 	}
+
 	void Update()
 	{
 		if(agent.remainingDistance < 0.2)
@@ -34,7 +36,16 @@ public class EnemyController : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+		if(Time.deltaTime >= attackTimer)
+		{
+			attackTimer = 0;
+		}
+		else
+		{
+			attackTimer -= Time.deltaTime;
+		}
 	}
+
 	void OnTriggerStay(Collider other)
 	{
 		if(other.gameObject == player)
@@ -49,6 +60,11 @@ public class EnemyController : MonoBehaviour
 					if(hit.collider.gameObject == player)
 					{
 						TargetPlayer();
+						if(direction.magnitude < 1.2 && attackTimer == 0 && player.GetComponent<PlayerController>().alive)
+						{
+							player.GetComponent<PlayerController>().health -= damage;
+							attackTimer = attackDelay;
+						}
 					}
 				}
 			}
@@ -57,35 +73,35 @@ public class EnemyController : MonoBehaviour
 				TargetPlayer();
 			}
 			else if((player.transform.position - transform.position).magnitude <= senseRange)
-			{
-				TargetPlayer();
-			}
+				{
+					TargetPlayer();
+				}
 		}
 	}
+
 	void OnCollisionEnter(Collision collision)
 	{
 		if(collision.gameObject == reactor && targetingReactor)
 		{
 			targetingReactor = false;
 			Sleep();
-            transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
-		}
-
-		if (collision.gameObject == player)
-		{
-			player.GetComponent<PlayerController>().playerHealth -= damage;
+			transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
+			print("hi");
 		}
 	}
+
 	void Sleep()
 	{
 		agent.Stop();
 		GetComponent<Rigidbody>().Sleep();
 	}
+
 	void Wake()
 	{
 		agent.Resume();
 		GetComponent<Rigidbody>().WakeUp();
 	}
+
 	void TargetPlayer()
 	{
 		targetingReactor = false;

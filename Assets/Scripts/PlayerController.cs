@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
 	private Quaternion targetRotation;
 	private Vector3 currentVelocityMod;
 
-	public float playerHealth;
+	public float health;
 	public Transform hand;
 	public Gun[] guns;
 	public string[] gunList;
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour {
 		isShooting = false;
 		alive = true;
 		deathTime = 0f;
-		playerHealth = 100f;
+		health = 100f;
 		gunText.text = gunList [0];
 
 		for (int i = 0; i < guns.Length; i++) {
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour {
 			ammoCountText.text = "" + equippedGun.ammoLoaded;
 			ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
 		}
-		healthText.text = "Player Health: " + playerHealth;
+		healthText.text = "Player Health: " + health;
 		if (alive) {
 			ControlMouse ();
 			if (equippedGun && !Input.GetButton ("Run")) {
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour {
 			}
 
 
-			if (playerHealth <= 0) {
+			if (health <= 0) {
 				alive = false;
 			}
 		} else {
