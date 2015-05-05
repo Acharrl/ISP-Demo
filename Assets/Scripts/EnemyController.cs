@@ -12,9 +12,12 @@ public class EnemyController : MonoBehaviour
 	public float damage;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public bool canAttack;
 	public float nextPossibleAttackTime;
 
+=======
+>>>>>>> parent of 9324160... enemies now do damage to player
 =======
 >>>>>>> parent of 9324160... enemies now do damage to player
 	private NavMeshAgent agent;
@@ -81,7 +84,10 @@ public class EnemyController : MonoBehaviour
 		{
 			player.GetComponent<PlayerController>().playerHealth -= damage;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			nextPossibleAttackTime = nextPossibleAttackTime + Time.time;
+=======
+>>>>>>> parent of 9324160... enemies now do damage to player
 =======
 >>>>>>> parent of 9324160... enemies now do damage to player
 		}
