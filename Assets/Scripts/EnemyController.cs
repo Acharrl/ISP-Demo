@@ -10,22 +10,24 @@ public class EnemyController : MonoBehaviour
 	public float senseRange;
 	public float health;
 	public float damage;
-
-	public bool canAttack;
-	public float nextPossibleAttackTime;
-
+	public float attackDelay;
 	private NavMeshAgent agent;
 	private bool targetingReactor;
-
+	private Vector3 direction;
+	public float attackTimer;
+	
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
 		targetingReactor = true;
-		damage = 1;
+		attackTimer = 0;
 	}
+	
 	void Update()
 	{
-		if(agent.remainingDistance < 0.2)
+		direction = player.transform.position - transform.position;
+
+		if(agent.remainingDistance < 0.2 && direction.magnitude > senseRange)
 		{
 			targetingReactor = true;
 		}
@@ -37,12 +39,20 @@ public class EnemyController : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
+		if(Time.deltaTime >= attackTimer)
+		{
+			attackTimer = 0;
+		}
+		else
+		{
+			attackTimer -= Time.deltaTime;
+		}
 	}
+	
 	void OnTriggerStay(Collider other)
 	{
 		if(other.gameObject == player)
 		{
-			Vector3 direction = player.transform.position - transform.position;
 			float angle = Vector3.Angle(direction, transform.forward);
 			if(angle < fovAngle / 2)
 			{
@@ -59,55 +69,45 @@ public class EnemyController : MonoBehaviour
 			{
 				TargetPlayer();
 			}
-			else if((player.transform.position - transform.position).magnitude <= senseRange)
+			if(direction.magnitude <= senseRange)
 			{
 				TargetPlayer();
+				print ("" + direction.magnitude);
+				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive)
+				{
+					player.GetComponent<PlayerController>().health -= damage;
+					attackTimer = attackDelay;
+				}
 			}
 		}
 	}
+	
 	void OnCollisionEnter(Collision collision)
 	{
 		if(collision.gameObject == reactor && targetingReactor)
 		{
 			targetingReactor = false;
 			Sleep();
-            transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
-		}
-
-		if (collision.gameObject == player)
-		{
-			player.GetComponent<PlayerController>().playerHealth -= damage;
-
-			nextPossibleAttackTime = nextPossibleAttackTime + Time.time;
-
+			transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
 		}
 	}
+	
 	void Sleep()
 	{
 		agent.Stop();
 		GetComponent<Rigidbody>().Sleep();
 	}
+	
 	void Wake()
 	{
 		agent.Resume();
 		GetComponent<Rigidbody>().WakeUp();
 	}
+	
 	void TargetPlayer()
 	{
 		targetingReactor = false;
 		Wake();
 		agent.destination = player.transform.position + Vector3.ClampMagnitude((transform.position - player.transform.position).normalized, 1);
-	}
-
-	private bool CanAttack ()
-	{
-		bool canAttack = true;
-		
-		if (Time.time < nextPossibleAttackTime) {
-			canAttack = false;
-		}
-
-		
-		return canAttack;
 	}
 }
