@@ -44,14 +44,4 @@ public class Shell : MonoBehaviour
 			}
 		}
 	}
-
-	void OnTriggerEnter (Collider c)
-	{
-		if (c.tag == "Ground") {
-			GetComponent<Rigidbody> ().Sleep ();
-			//If shells collide with ground, they stop animating
-		}
-	}
-	
-		
 }

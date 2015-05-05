@@ -79,8 +79,8 @@ public class Gun : MonoBehaviour
 				StartCoroutine ("RenderTracer", ray.direction * shotDistance);
 			}
 
-			Rigidbody newShell = Instantiate (shell, shellEjectionPoint.position, Quaternion.Euler (transform.rotation.eulerAngles + new Vector3 (90, 0, 0))) as Rigidbody;
-			newShell.AddForce (shellEjectionPoint.forward * Random.Range (150f, 200f) + spawn.forward * Random.Range (-10f, 10f));
+			Rigidbody newShell = Instantiate (shell, shellEjectionPoint.position, Quaternion.Euler (transform.rotation.eulerAngles + new Vector3 (90, Random.value * 30, 0))) as Rigidbody;
+			newShell.AddForce (shellEjectionPoint.forward * Random.Range (100f, 150f) + spawn.forward * Random.Range (-50f, 50f));
 		}
 
 
