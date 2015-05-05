@@ -11,6 +11,9 @@ public class EnemyController : MonoBehaviour
 	public float health;
 	public float damage;
 
+	public bool canAttack;
+	public float nextPossibleAttackTime;
+
 	private NavMeshAgent agent;
 	private bool targetingReactor;
 
@@ -74,6 +77,7 @@ public class EnemyController : MonoBehaviour
 		if (collision.gameObject == player)
 		{
 			player.GetComponent<PlayerController>().playerHealth -= damage;
+			nextPossibleAttackTime = nextPossibleAttackTime + Time.time;
 		}
 	}
 	void Sleep()
@@ -91,5 +95,17 @@ public class EnemyController : MonoBehaviour
 		targetingReactor = false;
 		Wake();
 		agent.destination = player.transform.position + Vector3.ClampMagnitude((transform.position - player.transform.position).normalized, 1);
+	}
+
+	private bool CanAttack ()
+	{
+		bool canAttack = true;
+		
+		if (Time.time < nextPossibleAttackTime) {
+			canAttack = false;
+		}
+
+		
+		return canAttack;
 	}
 }
