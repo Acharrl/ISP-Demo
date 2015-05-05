@@ -27,7 +27,9 @@ public class Gun : MonoBehaviour
 	public int clipSize;
 	public int ammoLoaded;
 	public int ammoNotLoaded;
-
+	public bool reloading;
+	public float reloadEndTime;
+	public float reloadTime;
 
 	//System
 	private float secondsBetweenShots;
@@ -44,6 +46,7 @@ public class Gun : MonoBehaviour
 			ammoLoaded = clipSize;
 		}
 
+		reloading = false;
 		ammoNotLoaded = ammoCount - ammoLoaded;
 				
 	}
@@ -85,6 +88,11 @@ public class Gun : MonoBehaviour
 
 	public void reload()
 	{
+
+		if (!reloading && ammoLoaded != clipSize) {
+			reloadEndTime = Time.time + reloadTime;
+			reloading = true;
+		}
 		if (ammoCount >= clipSize) {
 			ammoLoaded = clipSize;
 		}
@@ -116,7 +124,19 @@ public class Gun : MonoBehaviour
 			canShoot = false;
 		}
 
+		if (reloading) {
+			canShoot = false;
+		}
+
 		return canShoot;
+	}
+
+	public bool isReloading()
+	{
+		if (Time.time >= reloadEndTime) {
+			reloading = false;
+		}
+		return reloading;
 	}
 
 	IEnumerator RenderTracer (Vector3 hitPoint)

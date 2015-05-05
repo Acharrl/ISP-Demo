@@ -11,15 +11,9 @@ public class EnemyController : MonoBehaviour
 	public float health;
 	public float damage;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	public bool canAttack;
 	public float nextPossibleAttackTime;
 
-=======
->>>>>>> parent of 9324160... enemies now do damage to player
-=======
->>>>>>> parent of 9324160... enemies now do damage to player
 	private NavMeshAgent agent;
 	private bool targetingReactor;
 
@@ -83,13 +77,9 @@ public class EnemyController : MonoBehaviour
 		if (collision.gameObject == player)
 		{
 			player.GetComponent<PlayerController>().playerHealth -= damage;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 			nextPossibleAttackTime = nextPossibleAttackTime + Time.time;
-=======
->>>>>>> parent of 9324160... enemies now do damage to player
-=======
->>>>>>> parent of 9324160... enemies now do damage to player
+
 		}
 	}
 	void Sleep()

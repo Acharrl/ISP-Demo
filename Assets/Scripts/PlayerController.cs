@@ -74,9 +74,12 @@ public class PlayerController : MonoBehaviour {
 
 	public void Update()
 	{
-		if (equippedGun) {
+		if (equippedGun && !equippedGun.isReloading()) {
 			ammoCountText.text = "" + equippedGun.ammoLoaded;
 			ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
+		} else if (equippedGun && equippedGun.isReloading()) {
+			ammoCountText.text = "";
+			ammoLoadedText.text = "Reloading: " + (equippedGun.reloadEndTime - Time.time);
 		}
 		healthText.text = "Player Health: " + playerHealth;
 		if (alive) {
