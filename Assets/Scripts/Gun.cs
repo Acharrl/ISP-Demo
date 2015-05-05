@@ -51,6 +51,19 @@ public class Gun : MonoBehaviour
 				
 	}
 
+	public void Update()
+	{
+		if (Time.time >= reloadEndTime && reloading) {
+			reloading = false;
+			if (ammoCount >= clipSize) {
+				ammoLoaded = clipSize;
+			}
+			else {ammoLoaded = ammoCount;}
+			
+			ammoNotLoaded = ammoCount - ammoLoaded;
+		}
+	}
+
 	public void Shoot ()
 	{
 		if (CanShoot ()) {
@@ -93,12 +106,7 @@ public class Gun : MonoBehaviour
 			reloadEndTime = Time.time + reloadTime;
 			reloading = true;
 		}
-		if (ammoCount >= clipSize) {
-			ammoLoaded = clipSize;
-		}
-		else {ammoLoaded = ammoCount;}
 
-		ammoNotLoaded = ammoCount - ammoLoaded;
 
 	}
 
@@ -131,13 +139,7 @@ public class Gun : MonoBehaviour
 		return canShoot;
 	}
 
-	public bool isReloading()
-	{
-		if (Time.time >= reloadEndTime) {
-			reloading = false;
-		}
-		return reloading;
-	}
+
 
 	IEnumerator RenderTracer (Vector3 hitPoint)
 	{

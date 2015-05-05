@@ -74,10 +74,10 @@ public class PlayerController : MonoBehaviour {
 
 	public void Update()
 	{
-		if (equippedGun && !equippedGun.isReloading()) {
+		if (equippedGun && !equippedGun.reloading) {
 			ammoCountText.text = "" + equippedGun.ammoLoaded;
 			ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
-		} else if (equippedGun && equippedGun.isReloading()) {
+		} else if (equippedGun && equippedGun.reloading) {
 			ammoCountText.text = "";
 			ammoLoadedText.text = "Reloading: " + (equippedGun.reloadEndTime - Time.time);
 		}
@@ -112,7 +112,6 @@ public class PlayerController : MonoBehaviour {
 			} else if (Input.GetButtonDown ("Reload")) {
 				equippedGun.reload ();
 			}
-
 
 			if (playerHealth <= 0) {
 				alive = false;
