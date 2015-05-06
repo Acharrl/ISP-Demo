@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
 	public float runSpeed = 8;
 	private float acceleration = 5;
 
+	public GameObject reactor;
 
 	private Quaternion targetRotation;
 	private Vector3 currentVelocityMod;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour {
 	public Text healthText;
 	public Text ammoCountText;
 	public Text ammoLoadedText;
+	public Text gameOverText;
 
 	public bool isShooting;
 	public bool alive;
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 		deathTime = 0f;
 		health = 100f;
 		gunText.text = gunList [0];
+		gameOverText.text = "";
 
 		for (int i = 0; i < guns.Length; i++) {
 			gunInfo [i,0] = guns [i].ammoCount;
@@ -134,6 +137,9 @@ public class PlayerController : MonoBehaviour {
 				}
 			
 			}
+		}
+		if (!alive || reactor.GetComponent<Reactor> ().health <= 0) {
+			gameOverText.text = "Game Over";
 		}
 
 	}

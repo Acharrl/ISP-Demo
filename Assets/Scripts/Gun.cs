@@ -81,6 +81,12 @@ public class Gun : MonoBehaviour
 				{
 					hit.collider.gameObject.GetComponent<EnemyController>().health -= damage;
 				}
+
+				if (hit.collider.gameObject.tag == "Reactor")
+				{
+					hit.collider.gameObject.GetComponent<Reactor>().health -= damage;
+				}
+
 			}
 
 
