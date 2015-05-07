@@ -11,35 +11,40 @@ public class Shell : MonoBehaviour
 	private float deathTime;
 	private bool fading;
 
-	void Start ()
+	void Start()
 	{
-		mat = GetComponent<Renderer> ().material;
+		mat = GetComponent<Renderer>().material;
 		originalCol = mat.color;
 		deathTime = Time.time + lifeTime;
 
 		//StartCoroutine ("Fade");
 	}
 
-	void Update ()
+	void Update()
 	{
-		if (fading) {
+		if(fading)
+		{
 			fadePercent += Time.deltaTime * 0.2f;
 
-			if(fadePercent < .6){
-			mat.color = Color.Lerp (originalCol, new Color(.47f,.46f,.46f,.7f), fadePercent * 1.3f);
+			if(fadePercent < .6)
+			{
+				mat.color = Color.Lerp(originalCol, new Color(.47f, .46f, .46f, .7f), fadePercent * 1.3f);
 			}
 
-			if (fadePercent >= .6 && fadePercent < 1) {
-				mat.color = Color.Lerp (new Color(.47f,.46f,.46f,.7f), Color.clear, (fadePercent-.6f) * 2.5f);
+			if(fadePercent >= .6 && fadePercent < 1)
+			{
+				mat.color = Color.Lerp(new Color(.47f, .46f, .46f, .7f), Color.clear, (fadePercent - .6f) * 2.5f);
 			}
 
 			if(fadePercent > 1)
 			{
-				Destroy (gameObject);
+				Destroy(gameObject);
 			}
 		}
-		else {
-			if (Time.time > deathTime) {
+		else
+		{
+			if(Time.time > deathTime)
+			{
 				fading = true;
 			}
 		}

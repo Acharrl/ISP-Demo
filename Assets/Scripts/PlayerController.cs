@@ -96,10 +96,10 @@ public class PlayerController : MonoBehaviour
 			ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
 		}
 		else if(equippedGun && equippedGun.reloading)
-			{
-				ammoCountText.text = "";
-				ammoLoadedText.text = "Reloading: " + (equippedGun.reloadEndTime - Time.time);
-			}
+		{
+			ammoCountText.text = "";
+			ammoLoadedText.text = "Reloading: " + (equippedGun.reloadEndTime - Time.time);
+		}
 
 		healthText.text = "Player Health: " + health;
 
@@ -117,18 +117,18 @@ public class PlayerController : MonoBehaviour
 						isShooting = true;
 					}
 					else if(didShoot.Equals("click"))
-						{
-							GetComponent<AudioSource>().Play();
-						}
+					{
+						GetComponent<AudioSource>().Play();
+					}
 				}
 				else if(Input.GetButton("Shoot"))
-					{
-						equippedGun.ShootContinuous();
-					}
-					else
-					{
-						isShooting = false;
-					}
+				{
+					equippedGun.ShootContinuous();
+				}
+				else
+				{
+					isShooting = false;
+				}
 			}
 
 			if(Input.GetButtonDown("Weapon 1"))
@@ -136,33 +136,33 @@ public class PlayerController : MonoBehaviour
 				EquipGun(0);
 			}
 			else if(Input.GetButtonDown("Weapon 2"))
-				{
-					EquipGun(1);
-				}
-				else if(Input.GetButtonDown("Weapon 3"))
-					{
-						EquipGun(2);
-					}
-					else if(Input.GetButtonDown("Next Weapon") && equippedGun.gunID < (guns.Length - 1))
-						{
-							EquipGun(equippedGun.gunID + 1);
-						}
-						else if(Input.GetButtonDown("Next Weapon") && equippedGun.gunID == (guns.Length - 1))
-							{
-								EquipGun(0);
-							}
-							else if(Input.GetButtonDown("Previous Weapon") && equippedGun.gunID > 0)
-								{
-									EquipGun(equippedGun.gunID - 1);
-								}
-								else if(Input.GetButtonDown("Previous Weapon") && equippedGun.gunID == 0)
-									{
-										EquipGun(guns.Length - 1);
-									}
-									else if(Input.GetButtonDown("Reload"))
-										{
-											equippedGun.reload();
-										}
+			{
+				EquipGun(1);
+			}
+			else if(Input.GetButtonDown("Weapon 3"))
+			{
+				EquipGun(2);
+			}
+			else if(Input.GetButtonDown("Next Weapon") && equippedGun.gunID < (guns.Length - 1))
+			{
+				EquipGun(equippedGun.gunID + 1);
+			}
+			else if(Input.GetButtonDown("Next Weapon") && equippedGun.gunID == (guns.Length - 1))
+			{
+				EquipGun(0);
+			}
+			else if(Input.GetButtonDown("Previous Weapon") && equippedGun.gunID > 0)
+			{
+				EquipGun(equippedGun.gunID - 1);
+			}
+			else if(Input.GetButtonDown("Previous Weapon") && equippedGun.gunID == 0)
+			{
+				EquipGun(guns.Length - 1);
+			}
+			else if(Input.GetButtonDown("Reload"))
+			{
+				equippedGun.reload();
+			}
 
 			if(justDamaged)
 			{

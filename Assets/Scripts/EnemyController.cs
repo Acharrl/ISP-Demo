@@ -49,8 +49,9 @@ public class EnemyController : MonoBehaviour
 			attackTimer -= Time.deltaTime;
 		}
 		float temp = (transform.position - reactor.transform.position).magnitude;
-		print ("" + temp);
-		if (targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0 && deathTimer == 0) {
+		print("" + temp);
+		if(targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0 && deathTimer == 0)
+		{
 			reactor.GetComponent<Reactor>().health -= damage;
 			attackTimer = attackDelay;
 		}
@@ -58,7 +59,7 @@ public class EnemyController : MonoBehaviour
 		{
 			if(deathTimer > 1)
 			{
-				Destroy (gameObject);
+				Destroy(gameObject);
 			}
 			deathTimer += Time.deltaTime;
 		}
@@ -89,7 +90,7 @@ public class EnemyController : MonoBehaviour
 				TargetPlayer();
 				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive && deathTimer == 0)
 				{
-					player.GetComponent<PlayerController>().TakeDamage (damage);
+					player.GetComponent<PlayerController>().TakeDamage(damage);
 					attackTimer = attackDelay;
 				}
 			}

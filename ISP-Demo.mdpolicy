@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PolicySet name="ISP-Demo.mdpolicy">
-  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp">
-    <FileWidth>120</FileWidth>
-    <TabsToSpaces>False</TabsToSpaces>
-    <EolMarker>Unix</EolMarker>
-  </TextStylePolicy>
+<PolicySet name="Nathan">
   <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
     <IndentSwitchBody>True</IndentSwitchBody>
-    <AlignEmbeddedUsingStatements>False</AlignEmbeddedUsingStatements>
-    <AlignEmbeddedIfStatements>False</AlignEmbeddedIfStatements>
+    <AnonymousMethodBraceStyle>NextLine</AnonymousMethodBraceStyle>
+    <PropertyBraceStyle>NextLine</PropertyBraceStyle>
+    <PropertyGetBraceStyle>NextLine</PropertyGetBraceStyle>
+    <PropertySetBraceStyle>NextLine</PropertySetBraceStyle>
+    <EventBraceStyle>NextLine</EventBraceStyle>
+    <EventAddBraceStyle>NextLine</EventAddBraceStyle>
+    <EventRemoveBraceStyle>NextLine</EventRemoveBraceStyle>
     <StatementBraceStyle>NextLine</StatementBraceStyle>
     <ElseNewLinePlacement>NewLine</ElseNewLinePlacement>
-    <ElseIfNewLinePlacement>SameLine</ElseIfNewLinePlacement>
+    <ArrayInitializerBraceStyle>NextLine</ArrayInitializerBraceStyle>
     <BeforeMethodDeclarationParentheses>False</BeforeMethodDeclarationParentheses>
     <BeforeMethodCallParentheses>False</BeforeMethodCallParentheses>
     <BeforeConstructorDeclarationParentheses>False</BeforeConstructorDeclarationParentheses>
@@ -28,8 +28,7 @@
     <UsingParentheses>False</UsingParentheses>
     <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
   </CSharpFormattingPolicy>
-  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain">
-    <FileWidth>120</FileWidth>
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp">
     <TabsToSpaces>False</TabsToSpaces>
     <EolMarker>Unix</EolMarker>
   </TextStylePolicy>

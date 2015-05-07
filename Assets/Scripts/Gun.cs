@@ -10,7 +10,8 @@ public class Gun : MonoBehaviour
 	{
 		Semi,
 		Burst,
-		Auto}
+		Auto
+	}
 	;
 	public int gunID;
 	public GunType gunType;
@@ -35,14 +36,16 @@ public class Gun : MonoBehaviour
 	private float secondsBetweenShots;
 	private float nextPossibleShootTime;
 
-	void Start ()
+	void Start()
 	{
 		secondsBetweenShots = 60 / rpm;
-		if (GetComponent<LineRenderer> ()) {
-			tracer = GetComponent<LineRenderer> ();
+		if(GetComponent<LineRenderer>())
+		{
+			tracer = GetComponent<LineRenderer>();
 		}
 
-		if (ammoLoaded > clipSize) {
+		if(ammoLoaded > clipSize)
+		{
 			ammoLoaded = clipSize;
 		}
 
@@ -53,38 +56,45 @@ public class Gun : MonoBehaviour
 
 	public void Update()
 	{
-		if (Time.time >= reloadEndTime && reloading) {
+		if(Time.time >= reloadEndTime && reloading)
+		{
 			reloading = false;
-			if (ammoCount >= clipSize) {
+			if(ammoCount >= clipSize)
+			{
 				ammoLoaded = clipSize;
 			}
-			else {ammoLoaded = ammoCount;}
+			else
+			{
+				ammoLoaded = ammoCount;
+			}
 			
 			ammoNotLoaded = ammoCount - ammoLoaded;
 		}
 	}
 
-	public string Shoot ()
+	public string Shoot()
 	{
 		string message = CanShoot();
-		if (message.Equals ("shot")) {
+		if(message.Equals("shot"))
+		{
 			ammoCount -= 1;
 			ammoLoaded -= 1;
 
-			Ray ray = new Ray (spawn.position, spawn.forward);
+			Ray ray = new Ray(spawn.position, spawn.forward);
 			RaycastHit hit;
 
 			float shotDistance = 20;
 
-			if (Physics.Raycast (ray, out hit, shotDistance)) {
+			if(Physics.Raycast(ray, out hit, shotDistance))
+			{
 				shotDistance = hit.distance;
-				if (hit.collider.gameObject.tag == "Enemy")
+				if(hit.collider.gameObject.tag == "Enemy")
 				{
 					hit.collider.GetComponent<EnemyController>().health -= damage;
 					hit.collider.GetComponent<EnemyController>().Flinch();
 				}
 
-				if (hit.collider.gameObject.tag == "Reactor")
+				if(hit.collider.gameObject.tag == "Reactor")
 				{
 					hit.collider.gameObject.GetComponent<Reactor>().health -= damage;
 				}
@@ -94,14 +104,15 @@ public class Gun : MonoBehaviour
 
 			nextPossibleShootTime = Time.time + secondsBetweenShots;
 
-			GetComponent<AudioSource> ().Play ();
+			GetComponent<AudioSource>().Play();
 
-			if (tracer) {
-				StartCoroutine ("RenderTracer", ray.direction * shotDistance);
+			if(tracer)
+			{
+				StartCoroutine("RenderTracer", ray.direction * shotDistance);
 			}
 
-			Rigidbody newShell = Instantiate (shell, shellEjectionPoint.position, Quaternion.Euler (transform.rotation.eulerAngles + new Vector3 (90, Random.value * 30, 0))) as Rigidbody;
-			newShell.AddForce (shellEjectionPoint.forward * Random.Range (100f, 150f) + spawn.forward * Random.Range (-50f, 50f));
+			Rigidbody newShell = Instantiate(shell, shellEjectionPoint.position, Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(90, Random.value * 30, 0))) as Rigidbody;
+			newShell.AddForce(shellEjectionPoint.forward * Random.Range(100f, 150f) + spawn.forward * Random.Range(-50f, 50f));
 		}
 
 		return message;
@@ -110,7 +121,8 @@ public class Gun : MonoBehaviour
 	public void reload()
 	{
 
-		if (!reloading && ammoLoaded != clipSize) {
+		if(!reloading && ammoLoaded != clipSize)
+		{
 			reloadEndTime = Time.time + reloadTime;
 			reloading = true;
 		}
@@ -118,42 +130,43 @@ public class Gun : MonoBehaviour
 
 	}
 
-	public void ShootContinuous ()
+	public void ShootContinuous()
 	{
-		if (gunType == GunType.Auto) {
-			Shoot ();
+		if(gunType == GunType.Auto)
+		{
+			Shoot();
 		}
 
 
 	}
-	
 
-	private string CanShoot ()
+	private string CanShoot()
 	{
 		string message = "shot";
 
-		if (Time.time < nextPossibleShootTime) {
+		if(Time.time < nextPossibleShootTime)
+		{
 			message = "too soon";
 		}
 
-		if (ammoLoaded == 0) {
+		if(ammoLoaded == 0)
+		{
 			message = "click";
 		}
 
-		if (reloading) {
+		if(reloading)
+		{
 			message = "reloading";
 		}
 
 		return message;
 	}
 
-
-
-	IEnumerator RenderTracer (Vector3 hitPoint)
+	IEnumerator RenderTracer(Vector3 hitPoint)
 	{
 		tracer.enabled = true;
-		tracer.SetPosition (0, spawn.position);
-		tracer.SetPosition (1, spawn.position + hitPoint);
+		tracer.SetPosition(0, spawn.position);
+		tracer.SetPosition(1, spawn.position + hitPoint);
 		yield return null;
 		tracer.enabled = false;
 	}
