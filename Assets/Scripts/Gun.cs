@@ -64,9 +64,10 @@ public class Gun : MonoBehaviour
 		}
 	}
 
-	public void Shoot ()
+	public string Shoot ()
 	{
-		if (CanShoot ()) {
+		string message = CanShoot();
+		if (message.Equals ("shot")) {
 			ammoCount -= 1;
 			ammoLoaded -= 1;
 
@@ -103,7 +104,7 @@ public class Gun : MonoBehaviour
 			newShell.AddForce (shellEjectionPoint.forward * Random.Range (100f, 150f) + spawn.forward * Random.Range (-50f, 50f));
 		}
 
-
+		return message;
 	}
 
 	public void reload()
@@ -127,23 +128,23 @@ public class Gun : MonoBehaviour
 	}
 	
 
-	private bool CanShoot ()
+	private string CanShoot ()
 	{
-		bool canShoot = true;
+		string message = "shot";
 
 		if (Time.time < nextPossibleShootTime) {
-			canShoot = false;
+			message = "too soon";
 		}
 
 		if (ammoLoaded == 0) {
-			canShoot = false;
+			message = "click";
 		}
 
 		if (reloading) {
-			canShoot = false;
+			message = "reloading";
 		}
 
-		return canShoot;
+		return message;
 	}
 
 

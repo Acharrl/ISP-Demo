@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PolicySet name="ISP-Demo.mdpolicy">
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp">
+    <FileWidth>120</FileWidth>
+    <TabsToSpaces>False</TabsToSpaces>
+    <EolMarker>Unix</EolMarker>
+  </TextStylePolicy>
+  <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
+    <IndentSwitchBody>True</IndentSwitchBody>
+    <AlignEmbeddedUsingStatements>False</AlignEmbeddedUsingStatements>
+    <AlignEmbeddedIfStatements>False</AlignEmbeddedIfStatements>
+    <StatementBraceStyle>NextLine</StatementBraceStyle>
+    <ElseNewLinePlacement>NewLine</ElseNewLinePlacement>
+    <ElseIfNewLinePlacement>SameLine</ElseIfNewLinePlacement>
+    <BeforeMethodDeclarationParentheses>False</BeforeMethodDeclarationParentheses>
+    <BeforeMethodCallParentheses>False</BeforeMethodCallParentheses>
+    <BeforeConstructorDeclarationParentheses>False</BeforeConstructorDeclarationParentheses>
+    <BeforeIndexerDeclarationBracket>False</BeforeIndexerDeclarationBracket>
+    <BeforeDelegateDeclarationParentheses>False</BeforeDelegateDeclarationParentheses>
+    <NewParentheses>False</NewParentheses>
+    <IfParentheses>False</IfParentheses>
+    <WhileParentheses>False</WhileParentheses>
+    <ForParentheses>False</ForParentheses>
+    <ForeachParentheses>False</ForeachParentheses>
+    <CatchParentheses>False</CatchParentheses>
+    <SwitchParentheses>False</SwitchParentheses>
+    <LockParentheses>False</LockParentheses>
+    <UsingParentheses>False</UsingParentheses>
+    <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
+  </CSharpFormattingPolicy>
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain">
+    <FileWidth>120</FileWidth>
+    <TabsToSpaces>False</TabsToSpaces>
+    <EolMarker>Unix</EolMarker>
+  </TextStylePolicy>
+</PolicySet>
