@@ -43,6 +43,7 @@ public class Gun : MonoBehaviour
 		{
 			tracer = GetComponent<LineRenderer>();
 		}
+		tracer.enabled = false;
 
 		if(ammoLoaded > clipSize)
 		{
@@ -51,7 +52,8 @@ public class Gun : MonoBehaviour
 
 		reloading = false;
 		ammoNotLoaded = ammoCount - ammoLoaded;
-				
+
+		nextPossibleShootTime = Time.time + secondsBetweenShots;
 	}
 
 	public void Update()
@@ -73,7 +75,7 @@ public class Gun : MonoBehaviour
 	}
 
 	public string Shoot()
-	{
+	{	
 		string message = CanShoot();
 		if(message.Equals("shot"))
 		{
