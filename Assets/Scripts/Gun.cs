@@ -79,7 +79,8 @@ public class Gun : MonoBehaviour
 				shotDistance = hit.distance;
 				if (hit.collider.gameObject.tag == "Enemy")
 				{
-					hit.collider.gameObject.GetComponent<EnemyController>().health -= damage;
+					hit.collider.GetComponent<EnemyController>().health -= damage;
+					hit.collider.GetComponent<EnemyController>().Flinch();
 				}
 
 				if (hit.collider.gameObject.tag == "Reactor")

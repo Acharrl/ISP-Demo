@@ -22,7 +22,7 @@ public class EnemySphereController : MonoBehaviour
 		transform.Rotate(new Vector3(0, rotationSpeed * Time.deltaTime, 0));
 		if(flinchRadius - 1 > Time.deltaTime)
 		{
-			flinchRadius -= Time.deltaTime;
+			flinchRadius -= 2 * Time.deltaTime;
 		}
 		else
 		{

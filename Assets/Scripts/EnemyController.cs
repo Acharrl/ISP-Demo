@@ -113,4 +113,12 @@ public class EnemyController : MonoBehaviour
 		Wake();
 		agent.destination = player.transform.position + Vector3.ClampMagnitude((transform.position - player.transform.position).normalized, 1);
 	}
+
+	public void Flinch()
+	{
+		for(int i = 0; i < transform.childCount; i++)
+		{
+			transform.GetChild(i).GetComponent<EnemySphereController>().Flinch();
+		}
+	}
 }
