@@ -72,6 +72,11 @@ public class Gun : MonoBehaviour
 			
 			ammoNotLoaded = ammoCount - ammoLoaded;
 		}
+
+		if(!reloading && ammoLoaded == 0 && ammoCount > 0)
+		{
+			reload();
+		}
 	}
 
 	public string Shoot()
