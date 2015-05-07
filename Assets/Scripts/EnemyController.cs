@@ -47,6 +47,12 @@ public class EnemyController : MonoBehaviour
 		{
 			attackTimer -= Time.deltaTime;
 		}
+		float temp = (transform.position - reactor.transform.position).magnitude;
+		print ("" + temp);
+		if (targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0) {
+			reactor.GetComponent<Reactor>().health -= damage;
+			attackTimer = attackDelay;
+		}
 	}
 	
 	void OnTriggerStay(Collider other)
@@ -72,7 +78,6 @@ public class EnemyController : MonoBehaviour
 			if(direction.magnitude <= senseRange)
 			{
 				TargetPlayer();
-				print ("" + direction.magnitude);
 				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive)
 				{
 					player.GetComponent<PlayerController>().health -= damage;
@@ -86,8 +91,6 @@ public class EnemyController : MonoBehaviour
 	{
 		if(collision.gameObject == reactor && targetingReactor)
 		{
-			targetingReactor = false;
-			Sleep();
 			transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
 		}
 	}
