@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour {
 	private float fadePercent;
 	private float deathTime;
 	private bool fading;
+
+	private bool justDamaged;
+	public Slider healthSlider;
 	
 	void Start()
 	{
@@ -47,13 +50,16 @@ public class PlayerController : MonoBehaviour {
 		alive = true;
 		deathTime = 0f;
 		health = 100f;
+		healthSlider.value = health;
 		gunText.text = gunList [0];
 		gameOverText.text = "";
+		justDamaged = false;
 
 		for (int i = 0; i < guns.Length; i++) {
 			gunInfo [i,0] = guns [i].ammoCount;
 			gunInfo [i,1] = guns [i].ammoLoaded;
 		}
+
 		EquipGun (0);
 
 	}
@@ -73,7 +79,15 @@ public class PlayerController : MonoBehaviour {
 		ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
 	}
 
-
+	public void TakeDamage(float damage)
+	{
+		justDamaged = true;
+		health -= damage;
+		if (health < 0){
+			health = 0;
+		}
+		healthSlider.value = health;
+	}
 
 	public void Update()
 	{
@@ -84,9 +98,12 @@ public class PlayerController : MonoBehaviour {
 			ammoCountText.text = "";
 			ammoLoadedText.text = "Reloading: " + (equippedGun.reloadEndTime - Time.time);
 		}
+
 		healthText.text = "Player Health: " + health;
+
 		if (alive) {
 			ControlMouse ();
+
 			if (equippedGun && !Input.GetButton ("Run")) {
 				if (Input.GetButtonDown ("Shoot")) {
 					equippedGun.Shoot ();
@@ -116,10 +133,23 @@ public class PlayerController : MonoBehaviour {
 				equippedGun.reload ();
 			}
 
+			if(justDamaged){
+				gameObject.GetComponentInChildren<Light>().color = new Color(1f,0f,0f,1f);
+			}
+			else{
+				gameObject.GetComponentInChildren<Light>().color = Color.Lerp (gameObject.GetComponentInChildren<Light>().color, Color.white, 5f * Time.deltaTime);
+			}
+			justDamaged = false;
+			if(health >= 50){
+				healthSlider.GetComponentInChildren<Image>().color = new Color (((100-health)/50),1f,0f,1f);}
+			if(health < 50){
+				healthSlider.GetComponentInChildren<Image>().color = new Color (1f,(health/50),0f,1f);}
+
 			if (health <= 0) {
 				alive = false;
 			}
-		} else {
+		}
+		else {
 			if(deathTime == 0f){
 				mat = GetComponent<Renderer> ().material;
 				originalCol = mat.color;
@@ -153,10 +183,9 @@ public class PlayerController : MonoBehaviour {
 		transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle (transform.eulerAngles.y, targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
 
 		Vector3 input = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical"));
-		//No acceleration for .GetAxisRaw compared to .GetAxis		
+	
 		currentVelocityMod = Vector3.MoveTowards (currentVelocityMod, input, acceleration * Time.deltaTime);
 		Vector3 motion = currentVelocityMod;
-		//adds acceleration
 
 		motion *= (Mathf.Abs (input.x) == 1 && Mathf.Abs (input.z) == 1) ? .7f : 1;
 		motion *= (Input.GetButton ("Run")) ? runSpeed : walkSpeed;

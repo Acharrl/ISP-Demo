@@ -80,7 +80,7 @@ public class EnemyController : MonoBehaviour
 				TargetPlayer();
 				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive)
 				{
-					player.GetComponent<PlayerController>().health -= damage;
+					player.GetComponent<PlayerController>().TakeDamage (damage);
 					attackTimer = attackDelay;
 				}
 			}
