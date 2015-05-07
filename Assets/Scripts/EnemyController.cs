@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
 	private bool targetingReactor;
 	private Vector3 direction;
 	public float attackTimer;
+	public float deathTimer = 0;
 	
 	void Start()
 	{
@@ -35,9 +36,9 @@ public class EnemyController : MonoBehaviour
 		{
 			agent.destination = reactor.transform.position + Vector3.ClampMagnitude((transform.position - reactor.transform.position).normalized, 2.49f);
 		}
-		if(health <= 0)
+		if(health <= 0 && deathTimer == 0)
 		{
-			Destroy(gameObject);
+			Kill();
 		}
 		if(Time.deltaTime >= attackTimer)
 		{
@@ -49,9 +50,17 @@ public class EnemyController : MonoBehaviour
 		}
 		float temp = (transform.position - reactor.transform.position).magnitude;
 		print ("" + temp);
-		if (targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0) {
+		if (targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0 && deathTimer == 0) {
 			reactor.GetComponent<Reactor>().health -= damage;
 			attackTimer = attackDelay;
+		}
+		if(deathTimer > 0)
+		{
+			if(deathTimer > 1)
+			{
+				Destroy (gameObject);
+			}
+			deathTimer += Time.deltaTime;
 		}
 	}
 	
@@ -78,7 +87,7 @@ public class EnemyController : MonoBehaviour
 			if(direction.magnitude <= senseRange)
 			{
 				TargetPlayer();
-				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive)
+				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive && deathTimer == 0)
 				{
 					player.GetComponent<PlayerController>().TakeDamage (damage);
 					attackTimer = attackDelay;
@@ -120,5 +129,15 @@ public class EnemyController : MonoBehaviour
 		{
 			transform.GetChild(i).GetComponent<EnemySphereController>().Flinch();
 		}
+	}
+
+	void Kill()
+	{
+		GetComponent<CapsuleCollider>().enabled = false;
+		for(int i = 0; i < transform.childCount; i++)
+		{
+			transform.GetChild(i).GetComponent<EnemySphereController>().Fly();
+		}
+		deathTimer = 0.01f;
 	}
 }

@@ -7,6 +7,7 @@ public class EnemySphereController : MonoBehaviour
 	private float rotationSpeed;
 	private Vector3 originalPos;
 	private float flinchRadius = 1;
+	private bool flying = false;
 
 	void Start()
 	{
@@ -20,13 +21,17 @@ public class EnemySphereController : MonoBehaviour
 	void Update()
 	{
 		transform.Rotate(new Vector3(0, rotationSpeed * Time.deltaTime, 0));
-		if(flinchRadius - 1 > Time.deltaTime)
+		if(flinchRadius - 1 > Time.deltaTime && !flying)
 		{
 			flinchRadius -= 2 * Time.deltaTime;
 		}
-		else
+		else if(!flying)
 		{
 			flinchRadius = 1;
+		}
+		else
+		{
+			flinchRadius += 50 * Time.deltaTime;
 		}
 		sphere.localPosition = flinchRadius * originalPos;
 	}
@@ -34,5 +39,10 @@ public class EnemySphereController : MonoBehaviour
 	public void Flinch()
 	{
 		flinchRadius = 2;
+	}
+
+	public void Fly()
+	{
+		flying = true;
 	}
 }
