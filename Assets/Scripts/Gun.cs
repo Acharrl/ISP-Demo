@@ -103,7 +103,7 @@ public class Gun : MonoBehaviour
 
 				if(hit.collider.gameObject.tag == "Reactor")
 				{
-					hit.collider.gameObject.GetComponent<Reactor>().health -= damage;
+					hit.collider.gameObject.GetComponent<Reactor>().TakeDamage(damage);
 				}
 
 			}

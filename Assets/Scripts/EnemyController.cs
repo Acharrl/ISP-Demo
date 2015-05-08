@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour
 		print("" + temp);
 		if(targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0 && deathTimer == 0)
 		{
-			reactor.GetComponent<Reactor>().health -= damage;
+			reactor.GetComponent<Reactor>().TakeDamage(damage);
 			attackTimer = attackDelay;
 		}
 		if(deathTimer > 0)
