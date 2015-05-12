@@ -251,6 +251,7 @@ public class PlayerController : MonoBehaviour
 		{
 			health += other.gameObject.GetComponent<HealthPickup>().health;
 			other.gameObject.SetActive(false);
+			healthSlider.value = health;
 		}
 	}
 	
