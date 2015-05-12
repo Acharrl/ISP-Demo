@@ -7,6 +7,7 @@ public class Reactor : MonoBehaviour
 	public float health;
 	public float maxHealth;
 	private bool justDamaged;
+	private bool alive;
 	private float timeDamaged;
 	public float repairSpeed;
 	public Text reactorText;
@@ -18,10 +19,12 @@ public class Reactor : MonoBehaviour
 		repairSpeed = 2;
 		justDamaged = false;
 		reactorSlider.value = health;
+		alive = true;
 	}
 
 	void Update () {
 		if (health <= 0) {
+			alive = false;
 			health = 0;
 			reactorText.text = "Reactor Failure";
 		}
@@ -33,7 +36,7 @@ public class Reactor : MonoBehaviour
 			if (Time.time > timeDamaged + 5) {
 				justDamaged = false;
 			}
-		} else {
+		} else if (alive) {
 			if(health < maxHealth){
 				health = health + (Time.deltaTime * repairSpeed);
 			}
