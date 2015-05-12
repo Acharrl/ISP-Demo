@@ -16,12 +16,16 @@ public class EnemyController : MonoBehaviour
 	private Vector3 direction;
 	public float attackTimer;
 	public float deathTimer = 0;
+	public float dropChance;
+
+	public GameObject newHealth;
 	
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
 		targetingReactor = true;
 		attackTimer = 0;
+		dropChance = 15;
 	}
 	
 	void Update()
@@ -140,5 +144,10 @@ public class EnemyController : MonoBehaviour
 			transform.GetChild(i).GetComponent<EnemySphereController>().Fly();
 		}
 		deathTimer = 0.01f;
+
+		if(Random.Range(1,100) <= dropChance)
+		{
+			HealthPickup healthUp = Instantiate(newHealth, transform.position, transform.rotation) as HealthPickup;
+		}
 	}
 }
