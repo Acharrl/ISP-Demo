@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 	private Quaternion targetRotation;
 	private Vector3 currentVelocityMod;
 	public float health;
+	public float maxHealth;
 	public Transform hand;
 	public Gun[] guns;
 	public string[] gunList;
@@ -44,7 +45,8 @@ public class PlayerController : MonoBehaviour
 		isShooting = false;
 		alive = true;
 		deathTime = 0f;
-		health = 100f;
+		maxHealth = 100f;
+		health = maxHealth;
 		healthSlider.value = health;
 		gunText.text = gunList[0];
 		gameOverText.text = "";
@@ -90,6 +92,11 @@ public class PlayerController : MonoBehaviour
 
 	public void Update()
 	{
+		if(health > maxHealth)
+		{
+			health = maxHealth;
+		}
+
 		if(equippedGun && !equippedGun.reloading)
 		{
 			ammoCountText.text = "" + equippedGun.ammoLoaded;
@@ -237,4 +244,15 @@ public class PlayerController : MonoBehaviour
 		
 		controller.Move(motion * Time.deltaTime);
 	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.CompareTag ("Collectible"))
+		{
+			health += other.gameObject.GetComponent<HealthPickup>().health;
+			other.gameObject.SetActive(false);
+		}
+	}
+	
+
 }
