@@ -35,6 +35,8 @@ public class Gun : MonoBehaviour
 	//System
 	private float secondsBetweenShots;
 	private float nextPossibleShootTime;
+	public bool revving = false;
+	public float rotationSpeed;
 
 	void Start()
 	{
@@ -76,6 +78,11 @@ public class Gun : MonoBehaviour
 		if(!reloading && ammoLoaded == 0 && ammoCount > 0)
 		{
 			reload();
+		}
+
+		if(revving)
+		{
+			transform.GetChild(0).Rotate(new Vector3(0, rotationSpeed * Time.deltaTime, 0), Space.Self);
 		}
 	}
 

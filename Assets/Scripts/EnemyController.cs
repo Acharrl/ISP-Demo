@@ -147,7 +147,7 @@ public class EnemyController : MonoBehaviour
 
 		if(Random.Range(1,100) <= dropChance)
 		{
-			HealthPickup healthUp = Instantiate(newHealth, transform.position, transform.rotation) as HealthPickup;
+			Instantiate(newHealth, transform.position, transform.rotation);
 		}
 	}
 }

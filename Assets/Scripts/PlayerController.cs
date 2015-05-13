@@ -137,6 +137,12 @@ public class PlayerController : MonoBehaviour
 					isShooting = false;
 				}
 			}
+			else if(Input.GetButton("Run"))
+			{
+				isShooting = false;
+			}
+
+			equippedGun.revving = (equippedGun.gunID == 3 && Input.GetButton("Rev"));
 
 			if(Input.GetButtonDown("Weapon 1"))
 			{
