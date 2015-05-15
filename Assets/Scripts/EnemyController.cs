@@ -6,13 +6,12 @@ public class EnemyController : MonoBehaviour
 	public GameObject reactor;
 	public GameObject player;
 	public float fovAngle;
-	public float fovRange;
 	public float senseRange;
 	public float health;
 	public float damage;
 	public float attackDelay;
 	private NavMeshAgent agent;
-	private bool targetingReactor;
+	private string target = "reactor";
 	private Vector3 direction;
 	public float attackTimer;
 	public float deathTimer = 0;
@@ -23,7 +22,6 @@ public class EnemyController : MonoBehaviour
 	void Start()
 	{
 		agent = GetComponent<NavMeshAgent>();
-		targetingReactor = true;
 		attackTimer = 0;
 		dropChance = 15;
 	}
@@ -32,11 +30,11 @@ public class EnemyController : MonoBehaviour
 	{
 		direction = player.transform.position - transform.position;
 
-		if(agent.remainingDistance < 0.2 && direction.magnitude > senseRange)
+		if(target.Equals("player") && agent.remainingDistance < 0.2 && direction.magnitude > senseRange)
 		{
-			targetingReactor = true;
+			target = "reactor";
 		}
-		if(targetingReactor)
+		if(target.Equals("reactor"))
 		{
 			agent.destination = reactor.transform.position + Vector3.ClampMagnitude((transform.position - reactor.transform.position).normalized, 2.49f);
 		}
@@ -52,9 +50,7 @@ public class EnemyController : MonoBehaviour
 		{
 			attackTimer -= Time.deltaTime;
 		}
-		float temp = (transform.position - reactor.transform.position).magnitude;
-		print("" + temp);
-		if(targetingReactor && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0 && deathTimer == 0)
+		if(target.Equals("reactor") && (transform.position - reactor.transform.position).magnitude < 2.9 && attackTimer <= 0 && deathTimer == 0)
 		{
 			reactor.GetComponent<Reactor>().TakeDamage(damage);
 			attackTimer = attackDelay;
@@ -73,22 +69,6 @@ public class EnemyController : MonoBehaviour
 	{
 		if(other.gameObject == player)
 		{
-			float angle = Vector3.Angle(direction, transform.forward);
-			if(angle < fovAngle / 2)
-			{
-				RaycastHit hit;
-				if(Physics.Raycast(transform.position, direction.normalized, out hit, fovRange))
-				{
-					if(hit.collider.gameObject == player)
-					{
-						TargetPlayer();
-					}
-				}
-			}
-			if(player.GetComponent<PlayerController>().isShooting)
-			{
-				TargetPlayer();
-			}
 			if(direction.magnitude <= senseRange)
 			{
 				TargetPlayer();
@@ -98,12 +78,27 @@ public class EnemyController : MonoBehaviour
 					attackTimer = attackDelay;
 				}
 			}
+			else
+			{
+				float angle = Vector3.Angle(direction, transform.forward);
+				if(angle < fovAngle / 2)
+				{
+					RaycastHit hit;
+					if(Physics.Raycast(transform.position, direction.normalized, out hit, GetComponent<SphereCollider>().radius))
+					{
+						if(hit.collider.gameObject == player)
+						{
+							TargetPlayer();
+						}
+					}
+				}
+			}
 		}
 	}
 	
 	void OnCollisionEnter(Collision collision)
 	{
-		if(collision.gameObject == reactor && targetingReactor)
+		if(collision.gameObject == reactor && target.Equals("reactor"))
 		{
 			transform.LookAt(new Vector3(reactor.transform.position.x, transform.position.y, reactor.transform.position.z));
 		}
@@ -121,9 +116,9 @@ public class EnemyController : MonoBehaviour
 		GetComponent<Rigidbody>().WakeUp();
 	}
 	
-	void TargetPlayer()
+	public void TargetPlayer()
 	{
-		targetingReactor = false;
+		target = "player";
 		Wake();
 		agent.destination = player.transform.position + Vector3.ClampMagnitude((transform.position - player.transform.position).normalized, 1);
 	}

@@ -40,5 +40,13 @@ public class WaveController : MonoBehaviour
 		{
 			gameOverText.text = "You Win!";
 		}
+
+		if(player.GetComponent<PlayerController>().isShooting)
+		{
+			for(int i = 4; i < transform.childCount; i++)
+			{
+				transform.GetChild(i).GetComponent<EnemyController>().TargetPlayer();
+			}
+		}
 	}
 }
