@@ -99,6 +99,7 @@ public class PlayerController : MonoBehaviour
 
 		if(equippedGun && !equippedGun.reloading)
 		{
+			equippedGun.ammoNotLoaded = equippedGun.ammoCount - equippedGun.ammoLoaded;
 			ammoCountText.text = "" + equippedGun.ammoLoaded;
 			ammoLoadedText.text = "/" + equippedGun.ammoNotLoaded;
 		}
@@ -253,11 +254,16 @@ public class PlayerController : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.CompareTag ("Collectible"))
+		if (other.gameObject.CompareTag ("Health Collectible"))
 		{
 			health += other.gameObject.GetComponent<HealthPickup>().health;
 			other.gameObject.SetActive(false);
 			healthSlider.value = health;
+		}
+		if (other.gameObject.CompareTag ("Ammo Collectible"))
+		{
+			equippedGun.ammoCount += other.gameObject.GetComponent<AmmoPickup>().ammo;
+			other.gameObject.SetActive(false);
 		}
 	}
 	
