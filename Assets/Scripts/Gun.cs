@@ -148,8 +148,6 @@ public class Gun : MonoBehaviour
 		{
 			Shoot();
 		}
-
-
 	}
 
 	private string CanShoot()
@@ -181,10 +179,24 @@ public class Gun : MonoBehaviour
 
 	IEnumerator RenderTracer(Vector3 hitPoint)
 	{
+		float spread = 0;
+		float forwardSpread = 0;
 		tracer.enabled = true;
-		tracer.SetPosition(0, spawn.position);
+		if(gunID == 3)
+		{
+			spawn.GetChild(0).gameObject.SetActive(true);
+			spread = Random.Range(-0.1f, 0.1f);
+			forwardSpread = Random.Range(-0.05f, 0.05f);
+			spawn.GetChild(0).Translate((spread * Vector3.down / 5) + (forwardSpread * Vector3.right), Space.Self);
+		}
+		tracer.SetPosition(0, spawn.position + (spread * Vector3.right));
 		tracer.SetPosition(1, spawn.position + hitPoint);
 		yield return null;
 		tracer.enabled = false;
+		if(gunID == 3)
+		{
+			spawn.GetChild(0).Translate((spread * Vector3.up / 5) + (forwardSpread * Vector3.left), Space.Self);
+			spawn.GetChild(0).gameObject.SetActive(false);
+		}
 	}
 }
