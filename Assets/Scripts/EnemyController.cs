@@ -119,6 +119,10 @@ public class EnemyController : MonoBehaviour
 	
 	public void TargetPlayer()
 	{
+		if(!agent)
+		{
+			agent = GetComponent<NavMeshAgent>();
+		}
 		target = "player";
 		Wake();
 		agent.destination = player.transform.position + Vector3.ClampMagnitude((transform.position - player.transform.position).normalized, 1);
