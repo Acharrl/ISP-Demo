@@ -35,7 +35,8 @@ public class Gun : MonoBehaviour
 	//System
 	private float secondsBetweenShots;
 	private float nextPossibleShootTime;
-	public bool revving = false;
+	public float revAmount = 0;
+	public float revSpeed;
 	public float rotationSpeed;
 
 	void Start()
@@ -80,10 +81,7 @@ public class Gun : MonoBehaviour
 			reload();
 		}
 
-		if(revving)
-		{
-			transform.GetChild(0).Rotate(new Vector3(0, rotationSpeed * Time.deltaTime, 0), Space.Self);
-		}
+		transform.GetChild(0).Rotate(new Vector3(0, rotationSpeed * Time.deltaTime * revAmount, 0), Space.Self);
 	}
 
 	public string Shoot()
@@ -171,6 +169,11 @@ public class Gun : MonoBehaviour
 		if(reloading)
 		{
 			message = "reloading";
+		}
+
+		if(gunID == 3 && revAmount < 1)
+		{
+			message = "rev";
 		}
 
 		return message;

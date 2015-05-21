@@ -137,13 +137,32 @@ public class PlayerController : MonoBehaviour
 				{
 					isShooting = false;
 				}
+				
+				if(equippedGun.gunID == 3 && Input.GetButton("Rev"))
+				{
+					if(equippedGun.revAmount < 1)
+					{
+						equippedGun.revAmount += equippedGun.revSpeed * Time.deltaTime;
+					}
+					if(equippedGun.revAmount > 1)
+					{
+						equippedGun.revAmount = 1;
+					}
+				}
 			}
 			else if(Input.GetButton("Run"))
 			{
 				isShooting = false;
 			}
 
-			equippedGun.revving = (equippedGun.gunID == 3 && Input.GetButton("Rev"));
+			if(equippedGun.revAmount > 0 && (!Input.GetButton("Rev") || Input.GetButton("Run")))
+			{
+				equippedGun.revAmount -= equippedGun.revSpeed * Time.deltaTime;
+				if(equippedGun.revAmount < 0)
+				{
+					equippedGun.revAmount = 0;
+				}
+			}
 
 			if(Input.GetButtonDown("Weapon 1"))
 			{
@@ -247,6 +266,7 @@ public class PlayerController : MonoBehaviour
 
 		motion *= (Mathf.Abs(input.x) == 1 && Mathf.Abs(input.z) == 1) ? .7f : 1;
 		motion *= (Input.GetButton("Run")) ? runSpeed : walkSpeed;
+		motion *= 1 - (0.5f * equippedGun.revAmount);
 		motion += Vector3.up * -8;
 		
 		controller.Move(motion * Time.deltaTime);
