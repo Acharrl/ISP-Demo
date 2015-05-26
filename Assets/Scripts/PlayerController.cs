@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
 					}
 					else if(didShoot.Equals("click"))
 					{
-						GetComponent<AudioSource>().Play();
+							GetComponent<AudioSource>().Play();
 					}
 				}
 				else if(Input.GetButton("Shoot"))
@@ -136,17 +136,44 @@ public class PlayerController : MonoBehaviour
 				else
 				{
 					isShooting = false;
+						if(equippedGun.gunID == 3)
+						{
+							if(equippedGun.firing.isPlaying)
+							{
+								equippedGun.firing.Stop();
+							}
+						}
+
 				}
 				
 				if(equippedGun.gunID == 3 && Input.GetButton("Rev"))
 				{
 					if(equippedGun.revAmount < 1)
 					{
+						if(!equippedGun.spinup.isPlaying)
+						{equippedGun.spinup.Play();}
 						equippedGun.revAmount += equippedGun.revSpeed * Time.deltaTime;
 					}
 					if(equippedGun.revAmount > 1)
 					{
 						equippedGun.revAmount = 1;
+					}
+					if(equippedGun.revAmount == 1 && !equippedGun.spinning.isPlaying)
+					{
+						equippedGun.spinning.Play();
+					}
+				}
+				else if(equippedGun.gunID == 3 && !Input.GetButton("Rev"))
+				{
+					if(equippedGun.revAmount < 1 && equippedGun.spinup.isPlaying)
+					{
+						equippedGun.spinup.Stop();
+						equippedGun.spindown.Play();
+					}
+					if(equippedGun.revAmount == 1 && equippedGun.spinning.isPlaying)
+					{
+						equippedGun.spinning.Stop();
+						equippedGun.spindown.Play();
 					}
 				}
 			}

@@ -39,6 +39,11 @@ public class Gun : MonoBehaviour
 	public float revSpeed;
 	public float rotationSpeed;
 
+	public AudioSource spinup;
+	public AudioSource spinning;
+	public AudioSource spindown;
+	public AudioSource firing;
+
 	void Start()
 	{
 		secondsBetweenShots = 60 / rpm;
@@ -116,7 +121,18 @@ public class Gun : MonoBehaviour
 
 			nextPossibleShootTime = Time.time + secondsBetweenShots;
 
-			GetComponent<AudioSource>().Play();
+			if(gunID == 3)
+			{
+				if(!firing.isPlaying)
+				{
+					firing.Play();
+				}
+				else{print("");}
+			}
+			else
+			{
+				GetComponent<AudioSource>().Play();
+			}
 
 			if(tracer)
 			{
