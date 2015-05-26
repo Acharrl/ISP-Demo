@@ -8,12 +8,20 @@ public class WaveController : MonoBehaviour
 	public GameObject reactor;
 	public GameObject player;
 	public Text gameOverText;
+	public Text scoreCounter;
+	private int score = 0;
 	public int[] enemyCount;
 	public float[] spawnDelay;
 	public float[] waveTime;
 	public float[] enemyProportion;
 	private int currentWave = 0;
 	private float spawnTimer = 0;
+	private float waveTextTimer = 0;
+
+	void Start()
+	{
+		WaveText();
+	}
 
 	void Update()
 	{
@@ -23,6 +31,7 @@ public class WaveController : MonoBehaviour
 			{
 				currentWave++;
 				spawnTimer = 0;
+				WaveText();
 			}
 		}
 		if(spawnTimer <= 0 && enemyCount[currentWave] >= 1)
@@ -60,5 +69,23 @@ public class WaveController : MonoBehaviour
 				transform.GetChild(i).GetComponent<EnemyController>().TargetPlayer();
 			}
 		}
+		waveTextTimer -= Time.deltaTime;
+		if(waveTextTimer <= 0 & waveTextTimer > -5)
+		{
+			gameOverText.text = "";
+			waveTextTimer = -10;
+		}
+	}
+
+	public void IncrementScore()
+	{
+		score++;
+		scoreCounter.text = "Enemies Slain: " + score;
+	}
+
+	private void WaveText()
+	{
+		gameOverText.text = "Wave " + (currentWave + 1).ToString();
+		waveTextTimer = 5;
 	}
 }

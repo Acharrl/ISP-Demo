@@ -138,6 +138,7 @@ public class EnemyController : MonoBehaviour
 
 	void Kill()
 	{
+		transform.parent.GetComponent<WaveController>().IncrementScore();
 		GetComponent<CapsuleCollider>().enabled = false;
 		for(int i = 0; i < transform.childCount; i++)
 		{

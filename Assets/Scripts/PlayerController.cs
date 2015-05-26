@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
 		health = maxHealth;
 		healthSlider.value = health;
 		gunText.text = gunList[0];
-		gameOverText.text = "";
 		justDamaged = false;
 
 		for(int i = 0; i < guns.Length; i++)
@@ -163,7 +162,7 @@ public class PlayerController : MonoBehaviour
 						equippedGun.spinning.Play();
 					}
 				}
-				else if(equippedGun.gunID == 3 && !revButton)
+				if(equippedGun.gunID == 3 && !revButton)
 				{
 					if(equippedGun.revAmount < 1 && equippedGun.spinup.isPlaying)
 					{
@@ -193,16 +192,6 @@ public class PlayerController : MonoBehaviour
 					}
 				}
 				isShooting = false;
-			}
-						
-			
-			if(equippedGun.revAmount > 0 && (!revButton || Input.GetButton("Run")))
-			{
-				equippedGun.revAmount -= equippedGun.revSpeed * Time.deltaTime;
-				if(equippedGun.revAmount < 0)
-				{
-					equippedGun.revAmount = 0;
-				}
 			}
 
 			if(Input.GetButtonDown("Weapon 1"))
@@ -259,6 +248,15 @@ public class PlayerController : MonoBehaviour
 			if(health <= 0)
 			{
 				alive = false;
+				if(equippedGun.gunID == 3)
+				{
+					equippedGun.spinning.Stop();
+					equippedGun.firing.Stop();
+					if(equippedGun.revAmount > 0)
+					{
+						equippedGun.spindown.Play();
+					}
+				}
 			}
 		}
 		else
@@ -283,6 +281,14 @@ public class PlayerController : MonoBehaviour
 					mat.color = Color.Lerp(new Color(.47f, .46f, .46f, .7f), Color.clear, (fadePercent - .6f) * 2.5f);
 				}
 			
+			}
+		}
+		if(equippedGun.revAmount > 0 && (!revButton || Input.GetButton("Run") || !alive))
+		{
+			equippedGun.revAmount -= equippedGun.revSpeed * Time.deltaTime;
+			if(equippedGun.revAmount < 0)
+			{
+				equippedGun.revAmount = 0;
 			}
 		}
 		if(!alive || reactor.GetComponent<Reactor>().health <= 0)
