@@ -92,6 +92,14 @@ public class PlayerController : MonoBehaviour
 
 	public void Update()
 	{
+		if(equippedGun.gunID == 3 && !isShooting)
+		{
+			if(equippedGun.firing.isPlaying)
+			{
+				equippedGun.firing.Stop();
+			}
+		}
+		
 		if(health > maxHealth)
 		{
 			health = maxHealth;
@@ -136,14 +144,6 @@ public class PlayerController : MonoBehaviour
 				else
 				{
 					isShooting = false;
-						if(equippedGun.gunID == 3)
-						{
-							if(equippedGun.firing.isPlaying)
-							{
-								equippedGun.firing.Stop();
-							}
-						}
-
 				}
 				
 				if(equippedGun.gunID == 3 && Input.GetButton("Rev"))
@@ -179,9 +179,23 @@ public class PlayerController : MonoBehaviour
 			}
 			else if(Input.GetButton("Run"))
 			{
+				if(equippedGun.gunID == 3)
+				{
+					if(equippedGun.revAmount < 1 && equippedGun.spinup.isPlaying)
+					{
+						equippedGun.spinup.Stop();
+						equippedGun.spindown.Play();
+					}
+					if(equippedGun.revAmount == 1 && equippedGun.spinning.isPlaying)
+					{
+						equippedGun.spinning.Stop();
+						equippedGun.spindown.Play();
+					}
+				}
 				isShooting = false;
 			}
-
+						
+			
 			if(equippedGun.revAmount > 0 && (!Input.GetButton("Rev") || Input.GetButton("Run")))
 			{
 				equippedGun.revAmount -= equippedGun.revSpeed * Time.deltaTime;
