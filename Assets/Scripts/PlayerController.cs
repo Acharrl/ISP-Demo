@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 	public Text ammoLoadedText;
 	public Text gameOverText;
 	public bool isShooting;
+	private bool revButton;
 	public bool alive;
 	private Material mat;
 	private Color originalCol;
@@ -99,6 +100,8 @@ public class PlayerController : MonoBehaviour
 				equippedGun.firing.Stop();
 			}
 		}
+
+		revButton = Input.GetButton("Shoot") || Input.GetButton("Rev");
 		
 		if(health > maxHealth)
 		{
@@ -128,13 +131,10 @@ public class PlayerController : MonoBehaviour
 				if(Input.GetButtonDown("Shoot"))
 				{
 					string didShoot = equippedGun.Shoot();
-					if(didShoot.Equals("shot"))
+					isShooting = didShoot.Equals("shot");
+					if(didShoot.Equals("click"))
 					{
-						isShooting = true;
-					}
-					else if(didShoot.Equals("click"))
-					{
-							GetComponent<AudioSource>().Play();
+						GetComponent<AudioSource>().Play();
 					}
 				}
 				else if(Input.GetButton("Shoot"))
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
 					isShooting = false;
 				}
 				
-				if(equippedGun.gunID == 3 && Input.GetButton("Rev"))
+				if(equippedGun.gunID == 3 && revButton)
 				{
 					if(equippedGun.revAmount < 1)
 					{
@@ -163,7 +163,7 @@ public class PlayerController : MonoBehaviour
 						equippedGun.spinning.Play();
 					}
 				}
-				else if(equippedGun.gunID == 3 && !Input.GetButton("Rev"))
+				else if(equippedGun.gunID == 3 && !revButton)
 				{
 					if(equippedGun.revAmount < 1 && equippedGun.spinup.isPlaying)
 					{
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
 			}
 						
 			
-			if(equippedGun.revAmount > 0 && (!Input.GetButton("Rev") || Input.GetButton("Run")))
+			if(equippedGun.revAmount > 0 && (!revButton || Input.GetButton("Run")))
 			{
 				equippedGun.revAmount -= equippedGun.revSpeed * Time.deltaTime;
 				if(equippedGun.revAmount < 0)

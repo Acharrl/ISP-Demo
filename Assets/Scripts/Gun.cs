@@ -190,6 +190,11 @@ public class Gun : MonoBehaviour
 			message = "rev";
 		}
 
+		if(!message.Equals("shot"))
+		{
+			transform.parent.parent.GetComponent<PlayerController>().isShooting = false;
+		}
+
 		return message;
 	}
 
