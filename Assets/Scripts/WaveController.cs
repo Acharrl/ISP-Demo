@@ -4,13 +4,14 @@ using System.Collections;
 
 public class WaveController : MonoBehaviour
 {
-	public GameObject enemy;
+	public GameObject[] enemy;
 	public GameObject reactor;
 	public GameObject player;
 	public Text gameOverText;
 	public int[] enemyCount;
 	public float[] spawnDelay;
 	public float[] waveTime;
+	public float[] enemyProportion;
 	private int currentWave = 0;
 	private float spawnTimer = 0;
 
@@ -29,7 +30,18 @@ public class WaveController : MonoBehaviour
 			spawnTimer = spawnDelay[currentWave];
 			enemyCount[currentWave] -= 1;
 			Transform spawn = transform.GetChild((int)Random.Range(0, 3.999f));
-			GameObject newEnemy = (GameObject)Instantiate(enemy, spawn.position, spawn.rotation);
+			float seed = Random.value;
+			int enemyNumber = 0;
+			for(int i = 0; i < enemyProportion.Length; i++)
+			{
+				seed -= enemyProportion[i];
+				if(seed <= 0)
+				{
+					enemyNumber = i;
+					break;
+				}
+			}
+			GameObject newEnemy = (GameObject)Instantiate(enemy[enemyNumber], spawn.position, spawn.rotation);
 			newEnemy.GetComponent<EnemyController>().reactor = reactor;
 			newEnemy.GetComponent<EnemyController>().player = player;
 			newEnemy.transform.SetParent(transform);
