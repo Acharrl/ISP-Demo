@@ -73,7 +73,7 @@ public class EnemyController : MonoBehaviour
 			if(direction.magnitude <= senseRange)
 			{
 				TargetPlayer();
-				if(direction.magnitude < 1.2 && attackTimer <= 0 && player.GetComponent<PlayerController>().alive && deathTimer == 0)
+				if(direction.magnitude < 1.2 * transform.localScale.x && attackTimer <= 0 && player.GetComponent<PlayerController>().alive && deathTimer == 0)
 				{
 					player.GetComponent<PlayerController>().TakeDamage(damage);
 					attackTimer = attackDelay;
